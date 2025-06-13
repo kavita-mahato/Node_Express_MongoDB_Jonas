@@ -61,7 +61,7 @@ Node_express_mongoDB_Jonas/
 ## 🚀 Getting Started
 
 ```bash
-git clone https://github.com/sourav-kumar-357/Node_express_mongoDB_Jonas.git
+git clone https://github.com/kavita-mahato/Node_Express_MongoDB_Jonas.git
 cd Node_express_mongoDB_Jonas
 npm install
 cp config.env.example config.env  # Add your env variables
