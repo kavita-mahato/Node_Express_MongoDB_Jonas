@@ -114,8 +114,8 @@ JWT_EXPIRES_IN=90d
 ## 🙋‍♂️ Author
 
 **Kavita Mahato**  
-- [LinkedIn](https://www.linkedin.com/in/kavita_mahato)  
-- [GitHub](https://github.com/kavita_mahato)  
+- [LinkedIn](https://www.linkedin.com/in/kavita-mahato)  
+- [GitHub](https://github.com/kavita-mahato)  
 - 📧 kavitamahato0835@gmail.com
 
 ---
