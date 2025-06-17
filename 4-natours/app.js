@@ -1,8 +1,11 @@
 const fs = require('fs');
 const express = require('express');
+const morgan = require('morgan');
 
 const app = express();
 
+// 1. MIDDLEWARES
+app.use(morgan("dev"));
 app.use(express.json());
 
 app.use((req, res, next) => {
@@ -19,6 +22,7 @@ const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
 );
 
+// 2. ROUTE handlers
 const getAllTours = (req, res) => {
   console.log(req.requestTime);
   res.status(200).json({
@@ -36,7 +40,7 @@ const getTour = (req, res) => {
   const id = req.params.id * 1; //to convert to number from string
 
   // if(id>tours.length){
-  if (!tours) {
+  if (req.params.id * 1 > tours.length) {
     return res.status(404).json({
       status: 'fail',
       message: 'Invalid ID',
@@ -107,6 +111,7 @@ const deleteTour = (req, res) => {
 // app.get('/api/v1/tours/:id', updateTour);
 // app.get('/api/v1/tours/:id', deleteTour);
 
+// 3. ROUTES
 app.route('/api/v1/tours').get(getAllTours).post(createTour);
 
 app
@@ -125,6 +130,7 @@ app.get('/api/v1/tours', (req, res) => {
   });
 });
 
+// 4. START SERVER
 const port = 3000;
 app.listen(port, () => {
   console.log(`App running on port ${port}...`);
