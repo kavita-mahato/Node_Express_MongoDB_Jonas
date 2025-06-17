@@ -5,18 +5,18 @@ const morgan = require('morgan');
 const app = express();
 
 // 1. MIDDLEWARES
-app.use(morgan("dev"));
+app.use(morgan('dev'));
 app.use(express.json());
 
 app.use((req, res, next) => {
-  console.log("Hello from the Middleware ✨");
+  console.log('Hello from the Middleware ✨');
   next();
 });
 
-app.use((req,res,next) => {
+app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
   next();
-})
+});
 
 const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
@@ -27,7 +27,7 @@ const getAllTours = (req, res) => {
   console.log(req.requestTime);
   res.status(200).json({
     status: 'success',
-    requestedAt : req.requestTime,
+    requestedAt: req.requestTime,
     result: tours.length,
     data: {
       tours,
@@ -105,6 +105,37 @@ const deleteTour = (req, res) => {
   });
 };
 
+const getAllUsers = (req, res) => {
+  res.status(500).json({
+    status : 'error',
+    message : 'This route is not yet defined!'
+  });
+};
+const getUser = (req, res) => {
+  res.status(500).json({
+    status : 'error',
+    message : 'This route is not yet defined!'
+  });
+};
+const createUser = (req, res) => {
+  res.status(500).json({
+    status : 'error',
+    message : 'This route is not yet defined!'
+  });
+};
+const updateUser = (req, res) => {
+  res.status(500).json({
+    status : 'error',
+    message : 'This route is not yet defined!'
+  });
+};
+const deleteUser = (req, res) => {
+  res.status(500).json({
+    status : 'error',
+    message : 'This route is not yet defined!'
+  });
+};
+
 // app.get('/api/v1/tours', getAllTours);
 // app.get('/api/v1/tours/:id', getTour);
 // app.get('/api/v1/tours', createTour);
@@ -112,7 +143,7 @@ const deleteTour = (req, res) => {
 // app.get('/api/v1/tours/:id', deleteTour);
 
 // 3. ROUTES
-app.route('/api/v1/tours').get(getAllTours).post(createTour);
+app.route('/api/v1/tours').get(getAllTours).post(createUser);
 
 app
   .route('/api/v1/tours/:id')
@@ -129,6 +160,14 @@ app.get('/api/v1/tours', (req, res) => {
     },
   });
 });
+
+app.route('/api/v1/users').get(getAllUsers).post(createUser);
+
+app
+  .route('/api/v1/users/:id')
+  .get(getUser)
+  .patch(updateUser)
+  .delete(deleteUser);
 
 // 4. START SERVER
 const port = 3000;
@@ -207,4 +246,3 @@ app.delete('/api/v1/tours/:id', (req, res) => {
   });
 });
 */
-
