@@ -37,7 +37,7 @@ const getAllTours = (req, res) => {
 
 const getTour = (req, res) => {
   console.log(req.params);
-  const id = req.params.id * 1; //to convert to number from string
+  const id = req.params.id * 1; // To convert to number from string
 
   // if(id>tours.length){
   if (req.params.id * 1 > tours.length) {
