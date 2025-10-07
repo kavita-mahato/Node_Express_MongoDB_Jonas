@@ -4,7 +4,7 @@ const url = require("url");
 
 const replaceTemplate = require('./modules/replaceTemplate');
 
-//==================================================================
+//_______________________________________________________________________________________________
 // FILES
 
 // Blocking, Synchronous way
@@ -29,7 +29,7 @@ const replaceTemplate = require('./modules/replaceTemplate');
 // });
 // console.log('Will read file!');
 
-//==================================================================
+//_______________________________________________________________________________________________
 // Server
 const data = fs.readFileSync(`${__dirname}/dev-data/data.json`, "utf-8");
 const dataObj = JSON.parse(data);
