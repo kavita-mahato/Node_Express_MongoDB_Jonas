@@ -15,6 +15,7 @@ server.on("request", (req, res) => {
      // Solution 2 - Streams
      // In this solution the file is read in chunks and then sent to the client
      // and does not read the entire file into memory
+     /*
      const readable = fs.createReadStream("./test-file.txt"); // creating a readable stream
 
      // starting the readable stream
@@ -27,6 +28,18 @@ server.on("request", (req, res) => {
     readable.on("end", () => {
         res.end();
     });
+
+    // Handling error
+    readable.on("error", (err) => {
+        console.log(err);
+        res.statusCode = 500;
+        res.end("File not found!");
+    }); */
+
+    // Solution 3 - Piping (best solution)
+    // Piping is a method that connects a readable stream to a writable stream
+    const readable = fs.createReadStream("./test-file.txt");
+    readable.pipe(res); // piping the readable stream to the response
 });
 
 server.listen(8000, "127.0.0.1", () => {
