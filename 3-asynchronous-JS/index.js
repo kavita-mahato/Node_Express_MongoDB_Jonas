@@ -1,4 +1,5 @@
 const fs = require('fs');
+const { get } = require('http');
 const superagent = require('superagent');
 
 const readFilePro = (file) => {
@@ -19,22 +20,39 @@ const writeFilePro = (file, data) => {
     });
 };
 
-readFilePro(`${__dirname}/dog.txt`)
-    .then((data) => {
+const getDogPic = async () => {
+    try {
+        const data = await readFilePro(`${__dirname}/dog.txt`);
         console.log(`Breed: ${data}`);
-        // Superagent(library that makes HTTP requests) returns a promise by default
-        return superagent.get(`https://dog.ceo/api/breed/${data}/images/random`);
-    })
-    .then((res) => {
-        console.log(res.body.message);
-        return writeFilePro('dog-img.txt', res.body.message);
-    })
-    .then(() => {
+
+        const res = await superagent.get(`https://dog.ceo/api/breed/${data}/images/random`);
+
+        await writeFilePro('dog-img.txt', res.body.message);
         console.log('Random dog image saved to file!');
-    })
-    .catch((err) => {
+    }
+    catch (err) {
         console.log(err);
-    });
+    }
+};
+getDogPic();
+
+// Using Promises
+// readFilePro(`${__dirname}/dog.txt`)
+//     .then((data) => {
+//         console.log(`Breed: ${data}`);
+//         // Superagent(library that makes HTTP requests) returns a promise by default
+//         return superagent.get(`https://dog.ceo/api/breed/${data}/images/random`);
+//     })
+//     .then((res) => {
+//         console.log(res.body.message);
+//         return writeFilePro('dog-img.txt', res.body.message);
+//     })
+//     .then(() => {
+//         console.log('Random dog image saved to file!');
+//     })
+//     .catch((err) => {
+//         console.log(err);
+//     });
 
 // Old way of reading files using callbacks
 // fs.readFile(`${__dirname}/dog.txt`, (err, data) => {});
