@@ -33,6 +33,28 @@ app.get('/api/v1/tours', (req, res) => {
   });
 });
 
+app.get('/api/v1/tours/:id', (req, res) => {
+  console.log(req.params); // to get the id from the url
+
+  const id = req.params.id * 1; // converting string to number
+  const tour = tours.find((el) => el.id === id); // finding the tour with the given id
+
+  // check if the id is valid
+  if (!tour) {
+    return res.status(404).json({
+      status: 'Failed!',
+      err: 'Invalid ID',
+    });
+  }
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      tour,
+    },
+  });
+});
+
 app.post('/api/v1/tours', (req, res) => {
   // console.log(req.body);
 
@@ -50,7 +72,7 @@ app.post('/api/v1/tours', (req, res) => {
       res.status(201).json({
         status: 'Success',
         data: {
-            tour: newTour
+          tour: newTour,
         },
       });
     }
