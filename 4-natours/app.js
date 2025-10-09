@@ -2,7 +2,6 @@ const fs = require('fs');
 const express = require('express');
 
 const app = express();
-const port = 3000;
 
 // app.get('/', (req, res) => {
 //   res.status(200).json({
@@ -23,6 +22,7 @@ const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
 );
 
+// handling get request
 app.get('/api/v1/tours', (req, res) => {
   res.status(200).json({
     status: 'success',
@@ -43,7 +43,7 @@ app.get('/api/v1/tours/:id', (req, res) => {
   if (!tour) {
     return res.status(404).json({
       status: 'Failed!',
-      err: 'Invalid ID',
+      message: 'Invalid ID',
     });
   }
 
@@ -55,6 +55,7 @@ app.get('/api/v1/tours/:id', (req, res) => {
   });
 });
 
+// handling post request
 app.post('/api/v1/tours', (req, res) => {
   // console.log(req.body);
 
@@ -79,6 +80,26 @@ app.post('/api/v1/tours', (req, res) => {
   );
 });
 
+// handling patch request
+app.patch('/api/v1/tours/:id', (req, res) => {
+
+    // if the id is not valid
+    if (req.params.id * 1 >= tours.length) {
+    return res.status(404).json({
+      status: 'Failed!',
+      message: 'Invalid ID',
+    });
+  }
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      tour: '<Updated tour here...>'
+    }
+    });
+});
+
+const port = 3000;
 app.listen(port, () => {
   console.log(`App running on port ${port}...`);
 });
