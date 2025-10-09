@@ -40,6 +40,7 @@ server.on("request", (req, res) => {
     // Piping is a method that connects a readable stream to a writable stream
     const readable = fs.createReadStream("./test-file.txt");
     readable.pipe(res); // piping the readable stream to the response
+    // readableSource.pipe(writableDestination);
 });
 
 server.listen(8000, "127.0.0.1", () => {
