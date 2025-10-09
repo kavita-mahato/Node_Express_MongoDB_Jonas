@@ -17,6 +17,8 @@ const port = 3000;
 
 //-------------------------------------------------------------------------------------------
 
+app.use(express.json()); // middleware to parse the incoming JSON data
+
 const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
 );
@@ -29,6 +31,30 @@ app.get('/api/v1/tours', (req, res) => {
       tours,
     },
   });
+});
+
+app.post('/api/v1/tours', (req, res) => {
+  // console.log(req.body);
+
+  const newId = tours.length; // id for the new tour
+  const newTour = Object.assign({ id: newId }, req.body); // allows to create a new object by merging two existing objects together
+
+  tours.push(newTour);
+
+  // saving the new tour to the file
+  fs.writeFile(
+    `${__dirname}/dev-data/data/tours-simple.json`,
+    JSON.stringify(tours),
+    'utf-8',
+    (err) => {
+      res.status(201).json({
+        status: 'Success',
+        data: {
+            tour: newTour
+        },
+      });
+    }
+  );
 });
 
 app.listen(port, () => {
