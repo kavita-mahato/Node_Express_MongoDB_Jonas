@@ -5,13 +5,25 @@ const app = express();
 
 app.use(express.json()); // middleware to parse the incoming JSON data
 
+app.use((req, res, next) => {
+  console.log('Hello from the middleware 👋');
+  next(); // to pass the control to the next middleware
+});
+
+app.use((req, res, next) => {
+  req.requestTime = new Date().toISOString(); // ISOString() method converts date to a string
+  next();
+});
+
 const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
 );
 
 const getAllTours = (req, res) => {
+  console.log(req.requestTime); // to log the time of the request
   res.status(200).json({
     status: 'success',
+    requestedAt: req.requestTime,
     results: tours.length,
     data: {
       tours,
