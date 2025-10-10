@@ -2,9 +2,12 @@ const fs = require('fs');
 const express = require('express');
 const morgan = require('morgan');
 
+const tourRouter = require('./routes/tourRoutes');
+const userRouter = require('./routes/userRoutes');
+
 const app = express();
 
-// ------------------------------------------------ 1) MIDDLEWARES --------------------------------------------------
+// --------------------------------------------------- MIDDLEWARES ---------------------------------------------------
 app.use(morgan('dev')); // using morgan middleware for logging
 
 app.use(express.json()); // middleware to parse the incoming JSON data
@@ -19,161 +22,7 @@ app.use((req, res, next) => {
   next();
 });
 
-const tours = JSON.parse(
-  fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
-);
-
-// ----------------------------------------------- 2) ROUTE HANDLERS -------------------------------------------------
-const getAllTours = (req, res) => {
-  console.log(req.requestTime); // to log the time of the request
-  res.status(200).json({
-    status: 'success',
-    requestedAt: req.requestTime,
-    results: tours.length,
-    data: {
-      tours,
-    },
-  });
-};
-
-const getTour = (req, res) => {
-  console.log(req.params); // to get the id from the url
-
-  const id = req.params.id * 1; // converting string to number
-  const tour = tours.find((el) => el.id === id); // finding the tour with the given id
-
-  // check if the id is valid
-  if (!tour) {
-    return res.status(404).json({
-      status: 'Failed!',
-      message: 'Invalid ID',
-    });
-  }
-  res.status(200).json({
-    status: 'success',
-    data: {
-      tour,
-    },
-  });
-};
-
-const createTour = (req, res) => {
-  const newId = tours.length; // id for the new tour
-  const newTour = Object.assign({ id: newId }, req.body); // allows to create a new object by merging two existing objects together
-
-  tours.push(newTour);
-
-  // saving the new tour to the file
-  fs.writeFile(
-    `${__dirname}/dev-data/data/tours-simple.json`,
-    JSON.stringify(tours),
-    'utf-8',
-    (err) => {
-      res.status(201).json({
-        status: 'Success',
-        data: {
-          tour: newTour,
-        },
-      });
-    }
-  );
-};
-
-const updateTour = (req, res) => {
-  // if the id is not valid
-  if (req.params.id * 1 >= tours.length) {
-    return res.status(404).json({
-      status: 'Failed!',
-      message: 'Invalid ID',
-    });
-  }
-  res.status(200).json({
-    status: 'success',
-    data: {
-      tour: '<Updated tour here...>',
-    },
-  });
-};
-
-const deleteTour = (req, res) => {
-  // if the id is not valid
-  if (req.params.id * 1 >= tours.length) {
-    return res.status(404).json({
-      status: 'Failed!',
-      message: 'Invalid ID',
-    });
-  }
-  res.status(204).json({
-    status: 'success',
-    data: null,
-  });
-};
-
-// User Route Handlers
-const getAllUsers = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not yet defined!',
-  });
-}
-const getUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not yet defined!',
-  });
-}
-const createUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not yet defined!',
-  });
-}
-const updateUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not yet defined!',
-  });
-}
-const deleteUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not yet defined!',
-  });
-}
-
-// --------------------------------------------- 3) ROUTES --------------------------------------------------
-
-const tourRouter = express.Router();
-const userRouter = express.Router();
-
-// Chaining the route handlers
-tourRouter
-  .route('/')
-  .get(getAllTours)
-  .post(createTour);
-
-tourRouter
-  .route('/:id')
-  .get(getTour)
-  .patch(updateTour)
-  .delete(deleteTour);
-
-userRouter
-  .route('/')
-  .get(getAllUsers)
-  .post(createUser);
-
-userRouter
-  .route('/:id')
-  .get(getUser)
-  .patch(updateUser)
-  .delete(deleteUser);
-
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 
-// ------------------------------------------ 4) STARTING THE SERVER -----------------------------------------------
-const port = 3000;
-app.listen(port, () => {
-  console.log(`App running on port ${port}...`);
-});
+module.exports = app;
