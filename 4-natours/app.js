@@ -8,7 +8,10 @@ const userRouter = require('./routes/userRoutes');
 const app = express();
 
 // --------------------------------------------------- MIDDLEWARES ---------------------------------------------------
-app.use(morgan('dev')); // using morgan middleware for logging
+
+if(process.env.NODE_ENV === 'development'){
+  app.use(morgan('dev')); // using morgan middleware for logging
+}
 app.use(express.json()); // middleware to parse the incoming JSON data
 app.use(express.static(`${__dirname}/public`)); // to serve static files
 
