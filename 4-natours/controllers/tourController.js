@@ -2,10 +2,23 @@ const fs = require('fs');
 
 const checkID = (req, res, next, val) => {
   console.log(`Tour id is: ${val}`);
+  // val is the value of the id parameter in the url
+  // .params is a property of the request object that contains all the parameters in the url
   if (req.params.id * 1 >= tours.length) {
     return res.status(404).json({
       status: 'Failed!',
       message: 'Invalid ID',
+    });
+  }
+  next();
+};
+
+const checkBody = (req, res, next) => {
+  // .body instead of .params because we are checking the body of the request
+  if (!req.body.name || !req.body.price) {
+    return res.status(400).json({
+      status: 'Failed!',
+      message: 'Missing name or price',
     });
   }
   next();
@@ -81,6 +94,7 @@ const deleteTour = (req, res) => {
 
 module.exports = {
   checkID,
+  checkBody,
   getAllTours,
   getTour,
   createTour,
