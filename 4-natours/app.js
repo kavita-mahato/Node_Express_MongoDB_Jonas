@@ -9,8 +9,8 @@ const app = express();
 
 // --------------------------------------------------- MIDDLEWARES ---------------------------------------------------
 app.use(morgan('dev')); // using morgan middleware for logging
-
 app.use(express.json()); // middleware to parse the incoming JSON data
+app.use(express.static(`${__dirname}/public`)); // to serve static files
 
 app.use((req, res, next) => {
   console.log('Hello from the middleware 👋');
