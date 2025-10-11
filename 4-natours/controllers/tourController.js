@@ -4,50 +4,59 @@ const Tour = require('../models/tourModel');
 //   fs.readFileSync(filePath),
 // );
 
-const getAllTours = (req, res) => {
-  console.log(req.requestTime); // to log the time of the request
-  res.status(200).json({
-    status: 'success',
-    requestedAt: req.requestTime,
-    // results: tours.length,
-    // data: {
-    //   tours,
-    // },
-  });
+const getAllTours = async (req, res) => {
+  try {
+    const tours = await Tour.find();
+    res.status(200).json({
+      status: 'success',
+      results: tours.length,
+      data: {
+        tours,
+      },
+    });
+  } catch (err) {
+    res.status(404).json({
+      status: 'failed',
+      message: err,
+    });
+  }
 };
 
-const getTour = (req, res) => {
-  console.log(req.params); // to get the id from the url
-
-  const id = req.params.id * 1; // converting string to number
-  // const tour = tours.find((el) => el.id === id); // finding the tour with the given id
-
-  // res.status(200).json({
-  //   status: 'success',
-  //   data: {
-  //     tour,
-  //   },
-  // });
+const getTour = async (req, res) => {
+  try {
+    const tour = await Tour.findById(req.params.id);
+    res.status(200).json({
+      status: 'success',
+      data: {
+        tour,
+      },
+    });
+  } catch (err) {
+    res.status(404).json({
+      status: 'failed',
+      message: err,
+    });
+  }
 };
 
 const createTour = async (req, res) => {
-  try{
+  try {
     // const newTour = new Tour({})
-  // newTour.save()
+    // newTour.save()
 
-  const newTour = await Tour.create(req.body);
+    const newTour = await Tour.create(req.body);
 
-  res.status(201).json({
-    status: 'Success',
-    data: {
-      tour: newTour,
-    },
-  });
-  } catch(err){
+    res.status(201).json({
+      status: 'Success',
+      data: {
+        tour: newTour,
+      },
+    });
+  } catch (err) {
     res.status(400).json({
       status: 'failed',
-      message: "INVALID data sent!",
-    })
+      message: 'INVALID data sent!',
+    });
   }
 };
 
