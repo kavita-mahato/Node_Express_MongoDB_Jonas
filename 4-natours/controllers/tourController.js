@@ -1,16 +1,5 @@
 const Tour = require('../models/tourModel');
 
-const checkBody = (req, res, next) => {
-  // .body instead of .params because we are checking the body of the request
-  if (!req.body.name || !req.body.price) {
-    return res.status(400).json({
-      status: 'Failed!',
-      message: 'Missing name or price',
-    });
-  }
-  next();
-};
-
 // const tours = JSON.parse(
 //   fs.readFileSync(filePath),
 // );
@@ -41,13 +30,25 @@ const getTour = (req, res) => {
   // });
 };
 
-const createTour = (req, res) => {
+const createTour = async (req, res) => {
+  try{
+    // const newTour = new Tour({})
+  // newTour.save()
+
+  const newTour = await Tour.create(req.body);
+
   res.status(201).json({
-      status: 'Success',
-      // data: {
-      //   tour: newTour,
-      // },
-    });
+    status: 'Success',
+    data: {
+      tour: newTour,
+    },
+  });
+  } catch(err){
+    res.status(400).json({
+      status: 'failed',
+      message: "INVALID data sent!",
+    })
+  }
 };
 
 const updateTour = (req, res) => {
@@ -67,8 +68,6 @@ const deleteTour = (req, res) => {
 };
 
 module.exports = {
-  // checkID,
-  checkBody,
   getAllTours,
   getTour,
   createTour,
