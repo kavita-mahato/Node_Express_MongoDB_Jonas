@@ -1,7 +1,7 @@
 const express = require('express');
 
 const {
-    checkID,
+    // checkID,
     checkBody,
     getAllTours,
     getTour,
@@ -12,7 +12,7 @@ const {
 
 const router = express.Router();
 
-router.param('id', checkID);
+// router.param('id', checkID);
 
 router
   .route('/')
