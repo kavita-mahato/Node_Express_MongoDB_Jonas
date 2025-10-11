@@ -1,9 +1,13 @@
 const fs = require('fs');
+const path = require('path');
+
+const filePath = path.join(__dirname,'..', 'dev-data', 'data', 'tours-simple.json');
 
 const checkID = (req, res, next, val) => {
   console.log(`Tour id is: ${val}`);
   // val is the value of the id parameter in the url
   // .params is a property of the request object that contains all the parameters in the url
+  // eslint-disable-next-line no-use-before-define
   if (req.params.id * 1 >= tours.length) {
     return res.status(404).json({
       status: 'Failed!',
@@ -25,7 +29,7 @@ const checkBody = (req, res, next) => {
 };
 
 const tours = JSON.parse(
-  fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`)
+  fs.readFileSync(filePath),
 );
 
 const getAllTours = (req, res) => {
@@ -56,27 +60,30 @@ const getTour = (req, res) => {
 
 const createTour = (req, res) => {
   const newId = tours.length; // id for the new tour
-  const newTour = Object.assign({ id: newId }, req.body); // allows to create a new object by merging two existing objects together
+  // eslint-disable-next-line node/no-unsupported-features/es-syntax
+  const newTour = { id: newId, ...req.body }; // allows to create a new object by merging two existing objects together
 
   tours.push(newTour);
 
   // saving the new tour to the file
-  fs.writeFile(
-    `${__dirname}/dev-data/data/tours-simple.json`,
-    JSON.stringify(tours),
-    'utf-8',
-    (err) => {
-      res.status(201).json({
-        status: 'Success',
-        data: {
-          tour: newTour,
-        },
+  fs.writeFile(filePath, JSON.stringify(tours), 'utf-8', (err) => {
+    if (err) {
+      console.error('Error writing file:', err);
+      return res.status(500).json({
+        status: 'Fail',
+        message: 'Could not save the new tour. Please try again.',
       });
     }
-  );
+    res.status(201).json({
+      status: 'Success',
+      data: {
+        tour: newTour,
+      },
+    });
+  });
 };
 
-const updateTour = (req, res) => {  
+const updateTour = (req, res) => {
   res.status(200).json({
     status: 'success',
     data: {
